@@ -1,0 +1,301 @@
+,State,County,lat,lon,# Droughts VWC (2 CAT/2wk)(Tuesdays),# Droughts VWC (2 CAT/4wk)(Tuesdays),# Droughts VWC (-2 Z-SCORE/2wk)(Tuesdays),# Droughts VWC (-2 Z-SCORE/4wk)(Tuesdays),Highest Month VWC (2 CAT/2wk)(Tuesdays),Highest Month VWC (2 CAT/4wk)(Tuesdays),Highest Month VWC (-2 Z-SCORE/2wk)(Tuesdays),Highest Month VWC (-2 Z-SCORE/4wk)(Tuesdays)
+0,CT,Fairfield ,41.228103,-73.366757,26,20,54,45,['April'],['April'],['June'],['June']
+1,CT,Hartford ,41.806053,-72.732916,16,16,26,28,['April'],"['March', 'September', 'April']",['June'],['June']
+2,CT,Litchfield ,41.791897,-73.235428,28,21,48,48,['April'],['April'],['May'],['June']
+3,CT,Middlesex ,41.434525,-72.524227,34,25,53,41,['April'],['September'],['June'],['June']
+4,CT,New Haven ,41.349717,-72.900204,24,18,41,32,['April'],['April'],['June'],['June']
+5,CT,New London ,41.47863,-72.103452,32,23,49,34,['April'],['April'],['June'],"['April', 'June']"
+6,CT,Tolland ,41.858076,-72.340977,27,22,49,43,['April'],['April'],['May'],['July']
+7,CT,Windham ,41.824999,-71.990702,19,15,36,32,['April'],['April'],['May'],['June']
+8,DE,Kent,39.097088,-75.502982,5,1,24,23,['March'],['March'],['April'],['April']
+9,DE,New Castle,39.575915,-75.644132,15,17,29,35,"['April', 'September']",['April'],['May'],['April']
+10,DE,Sussex,38.677511,-75.335495,6,1,30,30,['March'],['March'],['April'],['April']
+11,DC,District of Columbia ,38.904149,-77.017094,15,9,38,38,['April'],['March'],['April'],"['May', 'August']"
+12,ME,Androscoggin,44.167681,-70.207435,19,18,46,33,['April'],['September'],"['May', 'April', 'June']","['June', 'April']"
+13,ME,Aroostook,46.727057,-68.64941,41,36,39,37,"['April', 'September']",['September'],['June'],"['April', 'June']"
+14,ME,Cumberland,43.808348,-70.330375,18,15,47,32,['April'],"['September', 'March']",['May'],"['May', 'June']"
+15,ME,Franklin,44.973012,-70.444727,30,29,37,41,['September'],['April'],"['May', 'June']",['June']
+16,ME,Hancock,44.564906,-68.370703,17,15,28,26,"['September', 'April']",['September'],"['May', 'September']","['June', 'May', 'July']"
+17,ME,Kennebec,44.417012,-69.765764,20,21,33,33,['September'],['September'],"['September', 'July']",['July']
+18,ME,Knox,44.188073,-69.217193,21,17,48,41,"['March', 'April', 'September']",['September'],['September'],['June']
+19,ME,Lincoln,43.994265,-69.514029,16,18,30,27,['April'],['September'],"['May', 'September', 'June']",['June']
+20,ME,Oxford,44.494585,-70.734688,24,21,49,42,['April'],['April'],['September'],['April']
+21,ME,Penobscot,45.390602,-68.657487,23,24,26,27,['September'],['September'],"['May', 'July']",['July']
+22,ME,Piscataquis,45.917678,-69.104548,35,30,42,36,"['July', 'September']",['September'],"['May', 'June', 'July']",['July']
+23,ME,Sagadahoc,43.916694,-69.843994,17,17,30,20,['April'],['September'],['September'],['August']
+24,ME,Somerset,45.507482,-69.97604,30,30,48,43,['April'],"['April', 'September']",['May'],['April']
+25,ME,Waldo,44.505361,-69.139678,21,17,50,39,"['September', 'March']",['September'],"['May', 'September']",['April']
+26,ME,Washington,44.967009,-67.609354,12,12,17,13,['April'],['April'],['July'],"['June', 'July']"
+27,ME,York,43.427239,-70.670402,16,14,32,32,['April'],"['March', 'April']",['May'],['June']
+28,MD,Allegany,39.612309,-78.703108,22,18,43,42,"['March', 'April']",['April'],['May'],['March']
+29,MD,Anne Arundel,38.993374,-76.560511,7,3,24,18,['March'],['March'],['April'],"['March', 'April', 'September']"
+30,MD,Baltimore,39.443167,-76.616569,19,13,37,27,['April'],['March'],['April'],['April']
+31,MD,Calvert,38.577824,-76.590198,6,2,35,30,['March'],['March'],['May'],['April']
+32,MD,Caroline,38.871531,-75.831631,7,3,29,27,['March'],['March'],['September'],"['April', 'September']"
+33,MD,Carroll,39.563189,-77.015512,20,16,31,30,['April'],['March'],['April'],['April']
+34,MD,Cecil,39.580285,-75.909392,21,20,40,30,['April'],['September'],"['April', 'May']",['April']
+35,MD,Charles,38.472853,-77.015427,4,1,15,12,['March'],['March'],['April'],"['September', 'April']"
+36,MD,Dorchester,38.429196,-76.047433,5,5,26,34,['March'],['March'],['April'],"['April', 'May']"
+37,MD,Frederick,39.470427,-77.397627,21,18,24,30,['April'],['March'],['April'],['May']
+38,MD,Garrett,39.529871,-79.269416,23,22,45,37,['April'],['April'],['May'],"['July', 'April']"
+39,MD,Harford,39.537429,-76.299789,17,14,26,35,['April'],['March'],['April'],['July']
+40,MD,Howard,39.252264,-76.924406,16,14,38,33,['April'],['March'],['April'],"['April', 'May']"
+41,MD,Kent,39.239177,-76.1242,13,13,25,27,['April'],['March'],['April'],"['April', 'August']"
+42,MD,Montgomery,39.137382,-77.203063,19,15,33,33,['April'],['March'],['April'],['May']
+43,MD,Prince George's,38.82588,-76.847272,7,0,30,20,['March'],[],['April'],['September']
+44,MD,Queen Anne's,39.040693,-76.082405,12,7,32,27,"['April', 'March']",['April'],['September'],['May']
+45,MD,St. Mary's,38.222666,-76.534271,12,6,42,36,['April'],['March'],['April'],['April']
+46,MD,Somerset,38.07445,-75.853323,6,4,31,37,['March'],['March'],['April'],['April']
+47,MD,Talbot,38.746127,-76.16355,11,11,24,27,['April'],['March'],['April'],['April']
+48,MD,Washington,39.603621,-77.814671,26,24,40,34,['April'],['April'],['May'],['April']
+49,MD,Wicomico,38.367389,-75.632206,8,2,45,38,['March'],['March'],['April'],['September']
+50,MD,Worcester,38.222133,-75.309932,13,13,31,38,['April'],['March'],['September'],['August']
+51,MD,Baltimore ,39.300214,-76.610516,16,12,36,29,['April'],['March'],['April'],['April']
+52,MA,Barnstable,41.680524,-70.248648,21,13,39,21,['April'],"['March', 'September']",['May'],"['April', 'September']"
+53,MA,Berkshire,42.375314,-73.213948,32,29,65,52,['April'],['April'],"['May', 'April']",['April']
+54,MA,Bristol,41.748576,-71.087062,25,15,42,27,['April'],"['March', 'September']",['April'],['April']
+55,MA,Dukes,41.380939,-70.701536,24,16,38,30,['April'],['September'],['May'],['April']
+56,MA,Essex,42.642711,-70.865107,19,15,44,33,['April'],['March'],['April'],"['April', 'September']"
+57,MA,Franklin,42.583791,-72.591655,29,27,55,42,['April'],['April'],['May'],['June']
+58,MA,Hampden,42.136198,-72.635648,30,27,52,47,['April'],['March'],['May'],['June']
+59,MA,Hampshire,42.339459,-72.663694,27,26,45,39,['April'],['September'],['May'],['June']
+60,MA,Middlesex,42.479477,-71.396507,24,22,45,42,['April'],['September'],"['May', 'April']",['April']
+61,MA,Nantucket,41.26842,-70.036824,5,3,6,4,['April'],"['May', 'April', 'July']",['April'],['September']
+62,MA,Norfolk,42.169703,-71.179875,24,20,45,32,['April'],['September'],['April'],['April']
+63,MA,Plymouth,41.987196,-70.741942,25,17,46,30,['April'],['September'],['May'],['September']
+64,MA,Suffolk,42.326256,-71.084657,25,22,57,44,['April'],['March'],['April'],['September']
+65,MA,Worcester,42.311693,-71.940282,26,22,50,48,['April'],['March'],['April'],['June']
+66,NH,Belknap,43.519109,-71.425366,24,21,50,43,['April'],['September'],['May'],['June']
+67,NH,Carroll,43.867567,-71.201665,23,19,51,37,['April'],['September'],['April'],['April']
+68,NH,Cheshire,42.925455,-72.248217,26,22,62,43,['April'],['March'],"['May', 'July']","['May', 'July']"
+69,NH,Coos,44.652419,-71.289383,30,24,51,48,['April'],['April'],['May'],"['April', 'September']"
+70,NH,Grafton,43.926488,-71.842264,31,30,45,45,"['May', 'April']",['April'],['May'],['April']
+71,NH,Hillsborough,42.911643,-71.723101,21,18,44,42,['April'],"['September', 'March']",['April'],['April']
+72,NH,Merrimack,43.299485,-71.68013,21,18,54,41,['April'],['March'],['April'],"['June', 'April']"
+73,NH,Rockingham,42.98936,-71.099437,20,16,37,37,['April'],['April'],['July'],['June']
+74,NH,Strafford,43.293177,-71.035927,16,15,35,29,['April'],['March'],['May'],['September']
+75,NH,Sullivan,43.361188,-72.222084,22,20,41,32,['April'],['September'],"['August', 'April']",['September']
+76,NJ,Atlantic,39.469354,-74.633758,14,8,35,32,['March'],['March'],['April'],['September']
+77,NJ,Bergen,40.95909,-74.074522,24,14,52,41,['April'],['March'],['April'],['June']
+78,NJ,Burlington,39.875786,-74.663006,16,10,47,38,['April'],['March'],"['April', 'March']",['April']
+79,NJ,Camden,39.802352,-74.961251,15,10,44,33,['April'],['March'],['April'],"['September', 'April']"
+80,NJ,Cape May,39.086143,-74.847716,6,1,27,19,['March'],['March'],['April'],['April']
+81,NJ,Cumberland,39.328387,-75.121644,13,7,25,23,['March'],['March'],['April'],['September']
+82,NJ,Essex,40.787217,-74.246136,26,16,41,33,['April'],"['March', 'April']",['May'],['April']
+83,NJ,Gloucester,39.721019,-75.143708,14,9,39,36,['April'],['March'],['April'],['September']
+84,NJ,Hudson,40.731384,-74.078627,20,13,47,32,['April'],['March'],['May'],['April']
+85,NJ,Hunterdon,40.565283,-74.91197,20,18,21,32,['April'],['April'],['April'],['July']
+86,NJ,Mercer,40.282503,-74.703724,17,11,40,27,['April'],['March'],['May'],['September']
+87,NJ,Middlesex,40.439593,-74.407585,21,17,37,29,['April'],['March'],['April'],['April']
+88,NJ,Monmouth,40.287056,-74.152446,18,11,48,35,['April'],['March'],['May'],['April']
+89,NJ,Morris,40.858581,-74.547427,24,13,40,33,['April'],['March'],['May'],['July']
+90,NJ,Ocean,39.86585,-74.263027,14,8,44,32,['March'],['March'],['April'],['September']
+91,NJ,Passaic,41.033763,-74.300308,25,16,34,33,['April'],"['March', 'April']",['April'],['July']
+92,NJ,Salem,39.573828,-75.357356,17,17,27,30,['April'],['March'],['April'],['May']
+93,NJ,Somerset,40.565522,-74.61993,19,17,27,31,['April'],['March'],['April'],['July']
+94,NJ,Sussex,41.137424,-74.691855,22,17,31,37,['April'],"['April', 'March']",['April'],['July']
+95,NJ,Union,40.659871,-74.308696,26,16,42,26,['April'],['March'],['April'],['April']
+96,NJ,Warren,40.853524,-75.009542,24,16,39,34,['April'],['April'],['April'],['April']
+97,NY,Albany,42.588271,-73.974014,20,18,37,43,['April'],"['September', 'April']",['April'],['April']
+98,NY,Allegany,42.247894,-78.026176,33,33,29,32,['April'],['May'],['May'],['June']
+99,NY,Bronx ,40.848711,-73.852939,17,12,38,35,['April'],['March'],['May'],"['September', 'July']"
+100,NY,Broome,42.161977,-75.830291,31,35,30,30,['April'],"['April', 'September']",['April'],['June']
+101,NY,Cattaraugus,42.244853,-78.681006,29,31,28,34,['September'],"['April', 'September']",['May'],"['July', 'August']"
+102,NY,Cayuga,43.008546,-76.574587,27,28,41,40,['April'],['April'],['April'],['April']
+103,NY,Chautauqua,42.304216,-79.407595,33,32,35,35,['September'],['August'],['September'],['July']
+104,NY,Chemung,42.155281,-76.747179,20,24,30,32,['April'],['September'],['May'],"['June', 'April']"
+105,NY,Chenango,42.489732,-75.604905,32,35,38,37,"['April', 'September']",['September'],['April'],['June']
+106,NY,Clinton,44.75271,-73.705648,25,21,54,40,['April'],['September'],['June'],['August']
+107,NY,Columbia,42.247729,-73.626805,31,28,58,53,['April'],['April'],['July'],['June']
+108,NY,Cortland,42.593824,-76.076265,32,35,36,36,['September'],['September'],"['April', 'May']",['April']
+109,NY,Delaware,42.193987,-74.966728,26,32,32,33,['April'],['September'],['April'],['July']
+110,NY,Dutchess,41.755009,-73.739951,25,22,42,35,['April'],['September'],['July'],['June']
+111,NY,Erie,42.752759,-78.778192,29,29,29,33,['April'],['April'],['September'],['April']
+112,NY,Essex,44.108971,-73.777573,26,22,56,45,['April'],"['September', 'April']",['September'],"['April', 'July']"
+113,NY,Franklin,44.594374,-74.31067,45,44,59,48,['May'],['May'],['May'],['July']
+114,NY,Fulton,43.115609,-74.423678,30,26,61,45,['April'],['September'],['September'],['July']
+115,NY,Genesee,43.00091,-78.192778,22,23,36,43,['April'],"['September', 'April']",['August'],['April']
+116,NY,Greene,42.286951,-74.149495,20,20,33,26,['April'],['September'],['April'],['August']
+117,NY,Hamilton,43.657879,-74.502456,28,27,54,52,['April'],['April'],"['April', 'July']",['June']
+118,NY,Herkimer,43.461635,-74.894694,29,27,63,45,"['September', 'April']",['April'],"['May', 'July']",['April']
+119,NY,Jefferson,43.995371,-76.053522,21,18,25,26,['September'],['April'],['May'],['May']
+120,NY,Kings ,40.635133,-73.950777,28,20,39,41,['April'],['April'],"['April', 'May']","['April', 'August']"
+121,NY,Lewis,43.786397,-75.442617,22,19,56,40,['September'],['September'],['April'],['July']
+122,NY,Livingston,42.727485,-77.76978,22,23,30,30,['April'],['April'],['April'],"['June', 'April']"
+123,NY,Madison,42.910026,-75.663575,32,33,34,36,['April'],['April'],"['April', 'July', 'September', 'May']","['July', 'April']"
+124,NY,Monroe,43.081408,-77.729899,22,23,26,38,"['September', 'April']",['April'],['June'],"['April', 'July']"
+125,NY,Montgomery,42.900891,-74.435358,27,29,27,29,['April'],['April'],['April'],['September']
+126,NY,Nassau,40.729687,-73.589384,27,22,43,36,['April'],['April'],['May'],['August']
+127,NY,New York ,40.776557,-73.970174,15,9,43,34,['March'],['March'],['May'],['July']
+128,NY,Niagara,43.194518,-78.786643,22,21,19,26,['April'],['September'],['September'],"['May', 'September', 'April']"
+129,NY,Oneida,43.242727,-75.434282,29,28,40,38,['April'],"['August', 'April']",['September'],['June']
+130,NY,Onondaga,43.00653,-76.196117,28,29,28,40,['April'],"['April', 'September']",['April'],['June']
+131,NY,Ontario,42.856695,-77.303277,28,27,37,36,['April'],['April'],"['April', 'May']",['April']
+132,NY,Orange,41.40241,-74.306252,16,14,25,29,['April'],['March'],['May'],['June']
+133,NY,Orleans,43.255515,-78.23546,16,19,22,26,"['April', 'September']",['September'],['June'],"['July', 'April']"
+134,NY,Oswego,43.461443,-76.209258,30,31,46,50,['May'],['April'],['May'],"['April', 'May']"
+135,NY,Otsego,42.629776,-75.028841,30,34,35,29,['September'],"['April', 'September']","['April', 'September']",['June']
+136,NY,Putnam,41.427904,-73.743882,24,18,42,41,['April'],['September'],['April'],['June']
+137,NY,Queens ,40.658557,-73.837929,28,18,40,35,['April'],"['March', 'April']",['May'],['August']
+138,NY,Rensselaer,42.710421,-73.513845,31,34,50,41,['April'],['April'],"['April', 'July']",['June']
+139,NY,Richmond ,40.563855,-74.137063,20,14,45,32,['April'],['March'],"['April', 'May']","['May', 'April']"
+140,NY,Rockland,41.154785,-74.024772,15,12,28,31,['April'],"['March', 'April']",['July'],['June']
+141,NY,St. Lawrence,44.488113,-75.074311,31,28,27,36,['May'],['April'],['May'],['May']
+142,NY,Saratoga,43.106135,-73.855387,29,24,56,42,['April'],['September'],"['September', 'July', 'April']",['June']
+143,NY,Schenectady,42.817542,-74.043583,19,20,33,36,['April'],['April'],"['April', 'May', 'July']",['June']
+144,NY,Schoharie,42.591294,-74.438172,25,27,27,28,['April'],['April'],['April'],['June']
+145,NY,Schuyler,42.419776,-76.938604,17,20,21,25,"['April', 'September']",['September'],['May'],"['June', 'April']"
+146,NY,Seneca,42.782294,-76.827088,26,24,21,34,['April'],['April'],['April'],['April']
+147,NY,Steuben,42.266725,-77.385525,22,25,31,39,['April'],['September'],"['April', 'May']","['June', 'April']"
+148,NY,Suffolk,40.943554,-72.692218,21,15,40,40,['April'],['March'],['April'],['April']
+149,NY,Sullivan,41.720176,-74.76468,27,25,46,41,['April'],['September'],['April'],['June']
+150,NY,Tioga,42.178057,-76.29745,30,33,24,35,"['April', 'September']",['September'],['April'],"['June', 'May']"
+151,NY,Tompkins,42.453281,-76.473712,22,19,44,42,['April'],['September'],['July'],['April']
+152,NY,Ulster,41.947232,-74.265447,27,25,39,44,['April'],['September'],['May'],"['June', 'July']"
+153,NY,Warren,43.555105,-73.838139,27,23,55,49,['April'],['April'],"['May', 'July']",['June']
+154,NY,Washington,43.312377,-73.439428,25,26,39,34,['April'],"['April', 'September']",['May'],['September']
+155,NY,Wayne,43.145832,-77.017732,30,27,48,43,['April'],['September'],['May'],['April']
+156,NY,Westchester,41.15277,-73.745912,30,23,46,37,['April'],"['September', 'April']",['April'],['June']
+157,NY,Wyoming,42.701363,-78.228567,18,23,26,33,['April'],['September'],['June'],['June']
+158,NY,Yates,42.638237,-77.104324,21,19,31,28,['April'],['March'],['April'],['April']
+159,PA,Adams,39.869471,-77.21773,24,21,37,34,['April'],['April'],['April'],['April']
+160,PA,Allegheny,40.46892,-79.98092,21,21,38,39,"['April', 'May']",['April'],['May'],['May']
+161,PA,Armstrong,40.812379,-79.464128,23,25,29,29,"['September', 'April']",['September'],['May'],['September']
+162,PA,Beaver,40.68414,-80.350721,21,17,32,24,"['April', 'May']","['September', 'April']",['September'],['June']
+163,PA,Bedford,39.997115,-78.48998,25,21,32,37,['May'],"['September', 'April']",['May'],['April']
+164,PA,Berks,40.413957,-75.92686,20,18,38,29,['April'],['March'],['April'],"['September', 'May']"
+165,PA,Blair,40.497926,-78.31064,22,22,31,32,['April'],['September'],['May'],['September']
+166,PA,Bradford,41.791495,-76.502124,24,27,24,28,['April'],['July'],['April'],"['July', 'August']"
+167,PA,Bucks,40.336887,-75.10706,22,20,24,24,['April'],['April'],"['April', 'May']",['August']
+168,PA,Butler,40.913834,-79.91896,20,18,26,27,['April'],['September'],['May'],['August']
+169,PA,Cambria,40.494127,-78.715284,31,34,24,28,['September'],['September'],['May'],['September']
+170,PA,Cameron,41.438289,-78.198315,31,30,20,32,['September'],"['September', 'May']",['May'],"['July', 'September', 'May']"
+171,PA,Carbon,40.917833,-75.709428,26,24,43,33,['April'],"['March', 'September']",['May'],"['July', 'September']"
+172,PA,Centre,40.90916,-77.84783,18,17,39,37,['April'],['September'],['April'],['May']
+173,PA,Chester,39.973965,-75.749732,19,15,46,38,['April'],['March'],['April'],['September']
+174,PA,Clarion,41.198239,-79.420404,27,26,30,37,['April'],['April'],['May'],['June']
+175,PA,Clearfield,41.000249,-78.473749,23,23,29,33,['April'],"['September', 'March']",['April'],['May']
+176,PA,Clinton,41.245301,-77.649141,25,26,35,38,['September'],['September'],['April'],"['April', 'July']"
+177,PA,Columbia,41.045517,-76.40426,28,26,23,27,['April'],"['May', 'April']","['April', 'May']",['July']
+178,PA,Crawford,41.68684,-80.107811,30,27,39,38,['September'],"['May', 'April']",['August'],"['May', 'July']"
+179,PA,Cumberland,40.164782,-77.26344,22,21,27,29,['April'],"['March', 'April', 'September']",['April'],"['March', 'July', 'September']"
+180,PA,Dauphin,40.412565,-76.792634,27,23,45,35,['April'],['March'],['April'],['July']
+181,PA,Delaware,39.91667,-75.398786,23,23,30,28,['April'],"['March', 'September']",['May'],"['April', 'August']"
+182,PA,Elk,41.427334,-78.653938,39,36,31,36,['May'],['May'],['May'],['September']
+183,PA,Erie,42.117952,-80.096386,29,31,34,36,['May'],['April'],['June'],['July']
+184,PA,Fayette,39.914115,-79.644586,27,27,44,40,['April'],['April'],['May'],['July']
+185,PA,Forest,41.513304,-79.249705,26,25,49,50,['April'],['September'],['May'],['July']
+186,PA,Franklin,39.926686,-77.724485,19,19,19,17,['April'],"['March', 'April', 'September']","['April', 'May']",['April']
+187,PA,Fulton,39.910751,-78.122617,22,21,35,36,['April'],['April'],"['May', 'April']",['September']
+188,PA,Greene,39.848983,-80.225694,23,20,25,29,['April'],['April'],['May'],['July']
+189,PA,Huntingdon,40.422321,-77.968584,20,17,44,42,['April'],['March'],['May'],"['May', 'July']"
+190,PA,Indiana,40.651432,-79.087545,30,29,24,34,"['September', 'April']",['May'],['May'],"['July', 'August', 'May']"
+191,PA,Jefferson,41.130287,-78.999044,39,40,42,47,"['September', 'April']",['April'],['May'],['May']
+192,PA,Juniata,40.530673,-77.400438,23,23,27,27,['April'],['September'],['April'],"['March', 'September', 'May']"
+193,PA,Lackawanna,41.44025,-75.609587,28,25,50,48,['April'],['March'],"['April', 'May']","['May', 'July', 'August']"
+194,PA,Lancaster,40.041992,-76.250198,21,18,33,24,"['April', 'March']",['March'],['April'],['August']
+195,PA,Lawrence,40.992735,-80.334446,22,22,23,33,['September'],['September'],['May'],['July']
+196,PA,Lebanon,40.367344,-76.458009,19,20,26,32,['April'],"['April', 'September', 'March']",['April'],['May']
+197,PA,Lehigh,40.614241,-75.590627,25,24,29,32,['April'],['April'],['May'],"['July', 'May']"
+198,PA,Luzerne,41.172787,-75.976035,28,31,22,29,['April'],['July'],"['April', 'May', 'September']","['July', 'August']"
+199,PA,Lycoming,41.343624,-77.055253,21,18,40,41,['September'],['September'],"['April', 'May']",['September']
+200,PA,McKean,41.81459,-78.572463,44,46,48,45,['September'],['June'],['May'],"['June', 'May']"
+201,PA,Mercer,41.300014,-80.252786,29,28,32,31,['September'],"['July', 'September']",['May'],['July']
+202,PA,Mifflin,40.61189,-77.620661,20,22,37,38,['September'],['September'],['June'],['May']
+203,PA,Monroe,41.056233,-75.329037,28,26,39,30,['April'],['March'],['May'],"['July', 'April', 'June', 'May']"
+204,PA,Montgomery,40.209999,-75.370201,25,23,29,29,['April'],['September'],['May'],"['September', 'April', 'July']"
+205,PA,Montour,41.029261,-76.665259,27,25,25,31,['April'],['March'],"['April', 'May']",['July']
+206,PA,Northampton,40.752791,-75.307447,23,18,35,31,['April'],"['April', 'March']",['April'],['April']
+207,PA,Northumberland,40.851524,-76.709877,21,22,21,28,['April'],['September'],['April'],['July']
+208,PA,Perry,40.39778,-77.266328,23,22,35,26,['April'],"['September', 'April']",['April'],['May']
+209,PA,Philadelphia,40.009376,-75.133346,25,23,35,26,['April'],"['March', 'September']","['April', 'May']","['May', 'September', 'April']"
+210,PA,Pike,41.325949,-75.031514,29,27,62,45,['April'],['September'],['April'],['May']
+211,PA,Potter,41.748222,-77.894735,25,23,43,53,['April'],['September'],"['April', 'May']",['July']
+212,PA,Schuylkill,40.70369,-76.2178,16,15,36,24,"['April', 'September']",['September'],['April'],['May']
+213,PA,Snyder,40.755348,-77.072954,21,18,54,37,['April'],['March'],['April'],"['April', 'July']"
+214,PA,Somerset,39.981297,-79.028486,18,19,24,28,['May'],['September'],['May'],['May']
+215,PA,Sullivan,41.43979,-76.511525,29,29,25,33,['April'],['September'],['April'],['July']
+216,PA,Susquehanna,41.819665,-75.800969,27,27,30,33,['April'],"['March', 'September']",['April'],['June']
+217,PA,Tioga,41.766859,-77.257288,20,19,26,30,['April'],['September'],['May'],"['March', 'July', 'September', 'May']"
+218,PA,Union,40.962179,-77.055475,21,20,26,26,['April'],['September'],['May'],['July']
+219,PA,Venango,41.40198,-79.754418,33,38,34,40,['April'],"['May', 'September']",['May'],['May']
+220,PA,Warren,41.843669,-79.313173,32,31,38,38,['September'],['May'],['September'],['May']
+221,PA,Washington,40.200005,-80.252132,18,15,23,24,['April'],['April'],['May'],['September']
+222,PA,Wayne,41.646589,-75.292485,31,31,43,39,['April'],['September'],['April'],['July']
+223,PA,Westmoreland,40.311068,-79.466688,27,29,32,38,['May'],['September'],['May'],['July']
+224,PA,Wyoming,41.525137,-76.00878,21,18,30,29,['April'],['March'],['April'],"['March', 'July', 'April', 'May']"
+225,PA,York,39.921839,-76.728446,23,17,33,29,['April'],"['September', 'March']",['April'],['July']
+226,RI,Bristol ,41.705271,-71.285053,28,21,45,34,['April'],['September'],['April'],['April']
+227,RI,Kent ,41.67775,-71.576314,28,20,46,32,['April'],['September'],"['May', 'April']",['April']
+228,RI,Newport ,41.502732,-71.284063,23,18,45,30,['April'],"['March', 'September']",['April'],['April']
+229,RI,Providence ,41.870488,-71.578242,25,17,48,34,['April'],['September'],['April'],['April']
+230,RI,Washington ,41.401162,-71.617612,31,22,50,34,['April'],['September'],['April'],['April']
+231,VT,Addison,44.031248,-73.141581,27,29,32,31,['September'],['April'],['May'],['April']
+232,VT,Bennington,43.035325,-73.11146,29,26,64,49,['April'],['April'],['April'],['June']
+233,VT,Caledonia,44.468791,-72.112168,24,22,59,55,['April'],['April'],"['May', 'April']","['July', 'April']"
+234,VT,Chittenden,44.460676,-73.070525,26,26,23,31,['May'],['April'],"['April', 'July']","['July', 'August', 'April']"
+235,VT,Essex,44.724021,-71.732736,33,27,54,48,['April'],['April'],['April'],['April']
+236,VT,Franklin,44.858964,-72.909402,34,33,63,52,['May'],['April'],['May'],"['August', 'April']"
+237,VT,Grand Isle,44.801788,-73.300758,21,21,25,33,['September'],['September'],"['May', 'April']",['April']
+238,VT,Lamoille,44.603504,-72.638356,25,25,55,42,['April'],['April'],['May'],['April']
+239,VT,Orange,44.003392,-72.369687,19,18,59,45,['April'],['September'],"['June', 'April']","['June', 'April']"
+240,VT,Orleans,44.828442,-72.25163,30,34,47,42,['April'],['April'],['July'],['June']
+241,VT,Rutland,43.580844,-73.038196,23,25,38,39,['April'],['April'],['May'],"['May', 'September', 'April']"
+242,VT,Washington,44.274953,-72.609475,23,21,56,48,['April'],['April'],['May'],['April']
+243,VT,Windham,42.999143,-72.716335,25,23,62,43,['April'],['April'],['May'],['June']
+244,VT,Windsor,43.588143,-72.591515,21,20,56,45,['April'],['September'],['April'],"['April', 'June', 'July', 'September']"
+245,WV,Barbour,39.139754,-79.996914,28,26,44,45,['April'],['April'],['May'],['June']
+246,WV,Berkeley,39.457854,-78.032338,23,19,24,21,['April'],['March'],['May'],['March']
+247,WV,Boone,38.022838,-81.713314,16,15,53,53,['April'],['April'],['July'],['April']
+248,WV,Braxton,38.699302,-80.731649,27,25,31,33,['April'],['September'],['June'],['June']
+249,WV,Brooke,40.272645,-80.578691,22,20,31,35,['April'],['April'],['May'],"['July', 'September', 'August']"
+250,WV,Cabell,38.41958,-82.243392,13,12,26,28,['April'],['April'],"['June', 'May', 'July']",['September']
+251,WV,Calhoun,38.844159,-81.115478,22,25,30,37,['April'],['September'],['May'],['September']
+252,WV,Clay,38.459826,-81.081866,19,22,49,46,['April'],['April'],['May'],"['September', 'April', 'July']"
+253,WV,Doddridge,39.263482,-80.701147,21,21,25,33,['April'],['April'],['May'],['August']
+254,WV,Fayette,38.030933,-81.086051,21,22,39,41,['April'],['April'],['May'],['April']
+255,WV,Gilmer,38.915865,-80.849409,24,23,32,36,['April'],['April'],['May'],"['July', 'June', 'August']"
+256,WV,Grant,39.105988,-79.195064,15,16,27,27,"['September', 'March']","['March', 'September']",['April'],['June']
+257,WV,Greenbrier,37.924418,-80.45059,15,17,24,34,['April'],"['April', 'September']","['April', 'July']",['September']
+258,WV,Hampshire,39.31214,-78.611989,18,18,30,38,['April'],['March'],"['April', 'July', 'May']",['July']
+259,WV,Hancock,40.516931,-80.570057,20,21,33,32,['April'],['April'],['May'],['July']
+260,WV,Hardy,39.010818,-78.843641,15,16,23,32,['April'],['March'],"['July', 'May']","['May', 'September']"
+261,WV,Harrison,39.279199,-80.386487,25,26,31,29,['April'],['April'],"['April', 'May']",['April']
+262,WV,Jackson,38.834234,-81.677717,16,16,28,29,['April'],['March'],['April'],['September']
+263,WV,Jefferson,39.307399,-77.86322,18,15,32,29,['April'],['March'],['April'],['May']
+264,WV,Kanawha,38.328061,-81.523522,19,17,52,51,['April'],['April'],['May'],"['September', 'July']"
+265,WV,Lewis,38.988844,-80.495518,33,32,34,32,['April'],['September'],['May'],['September']
+266,WV,Lincoln,38.171651,-82.077547,19,19,45,44,['April'],['April'],['May'],['April']
+267,WV,Logan,37.830591,-81.940853,25,23,28,39,['April'],['April'],['July'],['April']
+268,WV,McDowell,37.382663,-81.658205,19,21,44,44,['April'],"['March', 'September']",['July'],['September']
+269,WV,Marion,39.505839,-80.243402,24,20,38,35,['April'],['April'],['May'],"['April', 'May']"
+270,WV,Marshall,39.854717,-80.671378,18,16,27,32,['April'],['April'],['May'],['May']
+271,WV,Mason,38.759288,-82.024172,15,14,27,34,['April'],"['April', 'March']",['May'],['August']
+272,WV,Mercer,37.403448,-81.106456,17,18,24,32,['April'],['April'],"['April', 'June']",['April']
+273,WV,Mineral,39.405626,-78.956581,16,14,38,34,['April'],"['April', 'March', 'September']",['May'],['April']
+274,WV,Mingo,37.721151,-82.158993,21,17,48,41,['April'],"['March', 'September']",['May'],['September']
+275,WV,Monongalia,39.633645,-80.059074,21,20,30,33,['April'],['April'],['May'],['September']
+276,WV,Monroe,37.550353,-80.547891,16,12,27,34,['April'],['April'],['July'],"['June', 'May', 'July']"
+277,WV,Morgan,39.554835,-78.257314,16,15,17,24,['April'],['March'],['April'],['July']
+278,WV,Nicholas,38.291416,-80.797516,34,34,41,45,['April'],['April'],['May'],['July']
+279,WV,Ohio,40.098932,-80.620728,17,14,29,27,['April'],['April'],['May'],['May']
+280,WV,Pendleton,38.686836,-79.333707,7,3,35,22,['March'],['April'],['April'],"['April', 'September']"
+281,WV,Pleasants,39.368133,-81.161172,13,12,30,32,['April'],['April'],['April'],['August']
+282,WV,Pocahontas,38.332513,-80.012092,21,21,26,33,['April'],['September'],['September'],"['July', 'June', 'April']"
+283,WV,Preston,39.46903,-79.668865,32,34,29,37,['April'],"['July', 'September', 'May']",['April'],['July']
+284,WV,Putnam,38.510513,-81.906109,14,12,28,30,['April'],['April'],"['May', 'April']","['April', 'September']"
+285,WV,Raleigh,37.76247,-81.264671,19,21,37,42,['April'],['April'],"['April', 'July']",['April']
+286,WV,Randolph,38.781087,-79.867783,27,35,26,34,['April'],['April'],['May'],['July']
+287,WV,Ritchie,39.177112,-81.066317,17,17,21,33,['April'],"['March', 'April']",['May'],"['September', 'August']"
+288,WV,Roane,38.743033,-81.354502,15,15,26,36,['April'],['April'],"['May', 'April']",['September']
+289,WV,Summers,37.656003,-80.856315,18,16,24,26,['April'],['April'],['April'],"['May', 'April', 'June']"
+290,WV,Taylor,39.329072,-80.045629,29,27,33,41,['April'],['April'],"['May', 'April', 'September']",['September']
+291,WV,Tucker,39.111175,-79.559968,41,41,31,35,['June'],['June'],['April'],['June']
+292,WV,Tyler,39.465981,-80.879493,20,15,38,39,['April'],['March'],['May'],"['April', 'July']"
+293,WV,Upshur,38.902537,-80.231335,32,33,46,40,['April'],['April'],['May'],['May']
+294,WV,Wayne,38.145531,-82.419698,15,12,42,30,['April'],['April'],['May'],['April']
+295,WV,Webster,38.492985,-80.430262,37,41,35,33,['April'],['June'],['May'],['July']
+296,WV,Wetzel,39.596574,-80.634394,17,13,22,33,['April'],['March'],['May'],['July']
+297,WV,Wirt,39.020034,-81.382975,20,18,31,35,['April'],['April'],['May'],['June']
+298,WV,Wood,39.211679,-81.515928,13,12,21,28,['April'],"['March', 'April']","['July', 'May']","['April', 'June', 'July']"
+299,WV,Wyoming,37.603717,-81.548884,20,16,47,41,['April'],['April'],['July'],['April']

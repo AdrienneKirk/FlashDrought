@@ -11,6 +11,10 @@ import matplotlib.gridspec as gridspec
 import scipy.stats
 from scipy.stats import linregress 
 import spei as si
+from scipy.stats import pearson3, gamma, norm
+import matplotlib.colors as mcolors
+from matplotlib.collections import LineCollection
+from matplotlib import cm
 
 class KDEhistogram:
     """ 
@@ -269,9 +273,10 @@ class KDEhistogram:
             - Missing or non-numeric values in the specified column are ignored in the regression.
             - Only rows with valid x (days) and y (column values) are used.
         """
-        fake_dates = pd.to_datetime(['2000-' + dt.strftime('%m-%d') for dt in season_df.index]) # creates fake dates for regression calc
         season_df = season_df.copy()
         season_df = season_df.sort_index()
+        season_df.index = pd.to_datetime(season_df.index)  # ensure index is datetime
+        fake_dates = pd.to_datetime(['2000-' + dt.strftime('%m-%d') for dt in season_df.index])
 
         x = (fake_dates - fake_dates[0]).days.values 
         y = pd.to_numeric(season_df[column], errors='coerce')  
@@ -290,9 +295,12 @@ class KDEhistogram:
             plt.figure(figsize=(10, 5))
             plt.plot(index_vals, y_vals, '.', label='Observed')
             plt.plot(index_vals, y_fit, '-', color='red', label='Fitted Line')
-            plt.title(f'Linear Regression for {column} ({season}) {equation}')
+            plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))  
+            plt.gca().xaxis.set_major_locator(mdates.WeekdayLocator(interval = 2)) 
+            plt.title(f'PET {season}')
+            # plt.title(f'Linear Regression for {column} ({season}) {equation}')
             plt.xlabel('Date')
-            plt.ylabel(column)
+            plt.ylabel('PET')
             plt.legend()
             plt.grid(True)
             plt.tight_layout()
@@ -639,7 +647,10 @@ class DroughtDetection:
             season_df = df[df['season'] == season]
             season_series = season_df[column].dropna()
 
-            spi_vals = si.spi(season_series, dist=stats.gamma, fit_freq=None)
+            shape, loc, scale = gamma.fit(season_series)
+            cdf_vals = gamma.cdf(season_series, a=shape, loc=loc, scale=scale)
+            spi_vals = norm.ppf(cdf_vals)
+            spi_vals = np.clip(spi_vals, -2.5, 2.5)
 
             all_spi.loc[season_series.index] = spi_vals
         self.weekly[f'{column} gamma'] = all_spi
@@ -675,13 +686,17 @@ class DroughtDetection:
         """
         df = self.weekly.copy()
         all_spi = pd.Series(index=df.index, dtype='float64')
+
         for season in ['spring', 'summer', 'fall']:
             season_df = df[df['season'] == season]
             season_series = season_df[column].dropna()
 
-            spi_vals = si.spi(season_series, dist=stats.pearson3, fit_freq=None)
-
+            skew, loc, scale = pearson3.fit(season_series)
+            cdf_vals = pearson3.cdf(season_series, skew, loc=loc, scale=scale)
+            spi_vals = norm.ppf(cdf_vals)
+            spi_vals = np.clip(spi_vals, -2.5, 2.5)
             all_spi.loc[season_series.index] = spi_vals
+
         self.weekly[f'{column} pearson'] = all_spi
         return self.weekly
 
@@ -718,8 +733,11 @@ class DroughtDetection:
         for season in ['spring', 'summer', 'fall']:
             season_df = df[df['season'] == season]
             season_series = season_df[column].dropna()
-
-            spi_vals = si.spi(season_series, dist=stats.norm, fit_freq=None)
+          
+            mu, sigma = norm.fit(season_series)
+            cdf_vals = norm.cdf(season_series, loc=mu, scale=sigma)
+            spi_vals = norm.ppf(cdf_vals)
+            spi_vals = np.clip(spi_vals, -2.5, 2.5)
 
             all_spi.loc[season_series.index] = spi_vals
         self.weekly[f'{column} normal'] = all_spi
@@ -730,37 +748,34 @@ class DroughtDetection:
         Categorize a z-score into drought/wetness severity classes.
 
         Categories (returned as integers):
-            6 → Extreme Drought (≤ -2.0)
-            5 → Severe Drought (-2.0 to -1.5)
-            4 → Mild Drought (-1.5 to -1.0)
-            3 → Normal (-1.0 to 1.0)
-            2 → Moderately Wet (1.0 to 1.5)
-            1 → Severely Wet (1.5 to 2.0)
-            0 → Extremely Wet (> 2.0)
+            4 → Extreme Drought (≤ -2.05)
+            3 → Severe Drought (-2.05 to -1.645)
+            2 → Drought (-1.645 to -1.282)
+            1 → Mild Drought (-1.282 to -.84)
+            0 → Abnormally dry(-.84 to -.5)
+            -1 → Normal (> -.5)
 
         Parameters:
             val (float or None): z-score.
 
         Returns:
-            int or None: Category code (0–6), or None if val is None or NaN.
+            int or None: Category code (-1-4), or None if val is None or NaN.
         """
 
         if val is None or pd.isna(val):
             return None
-        if val <= -2.0:
-            return 6 #'Extreme Drought'
-        elif -2 < val <= -1.5:
-            return 5 #'Severe Drought'
-        elif -1.5 < val <= -1.0:
-            return 4 #'Mild Drought'
-        elif -1.0 < val <= 1.0:
-            return 3  # Normal
-        elif 1 < val <= 1.5:
-            return 2 #'Moderately Wet'
-        elif 1.5 < val <= 2:
-            return 1 #'Severely Wet'
-        elif val > 2:
-            return  0 #'Extremely Wet'
+        if val <= -2.05:
+            return 4 #'Extreme Drought'
+        elif -2.05 < val <= -1.645:
+            return 3 #'Severe Drought'
+        elif -1.645 < val <= -1.282:
+            return 2 #'Drought'
+        elif -1.282 < val <= -.84:
+            return 1  # 'Mild Drought'
+        elif -.84 < val <= -.5:
+            return 0 #'Abnormal Dry'
+        elif val > -.5:
+            return  -1 # Normal
 
     def categories(self, column, functions):
         """
@@ -768,7 +783,7 @@ class DroughtDetection:
 
         This method:
         - Computes z-score using the specified distribution(s)
-        - Maps each z-score to a category (0 to 6) using `_categories_func`
+        - Maps each z-score to a category (-1 to 4) using `_categories_func`
         - Adds new columns to the DataFrame for each distribution method's category
 
         Parameters
@@ -805,54 +820,54 @@ class DroughtDetection:
         self.weekly = weekly
         return weekly
     
-    
-    def residual_thresholds(self, column, weeks):
-        """
-        Computes threshold residual values corresponding to standard SPI category bounds
-        using fitted statistical distributions (normal, gamma, pearson).
+    # UPDATE THIS
+    # def residual_thresholds(self, column, weeks):
+    #     """
+    #     Computes threshold residual values corresponding to standard SPI category bounds
+    #     using fitted statistical distributions (normal, gamma, pearson).
 
-        This helps interpret SPI values in terms of actual residual units (e.g., mm of PET).
+    #     This helps interpret SPI values in terms of actual residual units (e.g., mm of PET).
 
-        Parameters
-        ----------
-        column : str
-            The name of the column in `self.weekly` containing the residuals to analyze.
+    #     Parameters
+    #     ----------
+    #     column : str
+    #         The name of the column in `self.weekly` containing the residuals to analyze.
 
-        weeks : int
-            The rolling window size (e.g., 2, 4 weeks), used to label output columns.
+    #     weeks : int
+    #         The rolling window size (e.g., 2, 4 weeks), used to label output columns.
 
-        Returns
-        -------
-        pd.DataFrame
-            DataFrame with:
-            - 'Z-Score': standard SPI thresholds
-            - 'Category': drought/wetness category names
-            - Residual thresholds for each distribution (in same units as `column`)
-            Columns are named like 'normal 4 rolling Residual'.
-        """
-        spi_bounds = [-2.0, -1.5, -1.0, 1.0, 1.5, 2.0] 
-        categories = ["Extreme Drought", "Severe Drought", "Mild Drought", "Normal", "Moderately Wet", "Severely Wet"]
+    #     Returns
+    #     -------
+    #     pd.DataFrame
+    #         DataFrame with:
+    #         - 'Z-Score': standard SPI thresholds
+    #         - 'Category': drought/wetness category names
+    #         - Residual thresholds for each distribution (in same units as `column`)
+    #         Columns are named like 'normal 4 rolling Residual'.
+    #     """
+    #     spi_bounds = [-2.0, -1.5, -1.0, 1.0, 1.5, 2.0] 
+    #     categories = ["Extreme Drought", "Severe Drought", "Mild Drought", "Normal", "Moderately Wet", "Severely Wet"]
 
-        results = {'Z-Score': spi_bounds, "Category": categories}
+    #     results = {'Z-Score': spi_bounds, "Category": categories}
 
-        for dist in ['normal', 'gamma', 'pearson']:
-            series = self.weekly[column].dropna()
+    #     for dist in ['normal', 'gamma', 'pearson']:
+    #         series = self.weekly[column].dropna()
 
-            if dist == 'normal':
-                params = stats.norm.fit(series)
-                dist_obj = stats.norm(*params)
-            elif dist == 'gamma':
-                params = stats.gamma.fit(series)
-                dist_obj = stats.gamma(*params)
-            elif dist == 'pearson':
-                params = stats.pearson3.fit(series)
-                dist_obj = stats.pearson3(*params)
+    #         if dist == 'normal':
+    #             params = stats.norm.fit(series)
+    #             dist_obj = stats.norm(*params)
+    #         elif dist == 'gamma':
+    #             params = stats.gamma.fit(series)
+    #             dist_obj = stats.gamma(*params)
+    #         elif dist == 'pearson':
+    #             params = stats.pearson3.fit(series)
+    #             dist_obj = stats.pearson3(*params)
 
-            residuals = [dist_obj.ppf(stats.norm.cdf(spi)) for spi in spi_bounds]
-            results[f'{dist} {weeks} rolling Residual'] = residuals
+    #         residuals = [dist_obj.ppf(stats.norm.cdf(spi)) for spi in spi_bounds]
+    #         results[f'{dist} {weeks} rolling Residual'] = residuals
 
-        df = pd.DataFrame(results)
-        return df
+    #     df = pd.DataFrame(results)
+    #     return df
 
     def _onset_two_weeks(self, column, functions):
         """
@@ -895,7 +910,7 @@ class DroughtDetection:
             onset_record = {}
             
             peak_index = None # tracks the peak for detecting end pt
-            peak_category = -1 
+            peak_category = None 
             peak_value = None
 
             # detects a category change of an increase in 2
@@ -906,7 +921,7 @@ class DroughtDetection:
                 if pd.notna(cat_now) and pd.notna(cat_past):
                     change = cat_now - cat_past # calculates difference
 
-                    if not in_onset and change >= 2:  # if change is +2 or greater and in onset
+                    if not in_onset and change >= 2 and cat_past >= 0:  # if change is +2 or greater and in onset
                         in_onset = True 
                         start_index = i-2
                         onset_record = { "onset_date": weekly.index[start_index], "onset_category": cat_past, "onset_value": weekly.iloc[start_index][f'{column} {function}']}
@@ -968,18 +983,13 @@ class DroughtDetection:
                 onset_record["end_value"],
                 onset_record["function"]
             ))
-
+        # onset_weeks_df['onset_date'] = pd.to_datetime(onset_weeks_df['onset_date'], errors='coerce')
         onset_weeks_df = pd.DataFrame(all_onsets, columns=['onset_date', 'end_date',f'onset {column} category',f'end {column} category', f'onset {column}', f'end {column}', 'function'])
         return onset_weeks_df
 
     def two_week_onset(self, column, functions):
         """
-        Filters for two-week flash drought onsets where the ending drought category is severe or worse.
-
-        This method calls `_onset_two_weeks` to detect onset events, then filters those events
-        to retain only cases where the end category exceeds 4 — corresponding to:
-        - 5 = "Moderately Wet"
-        - 6 = "Severely Wet"
+        Filters for two-week flash drought onsets where the starting drought category is not normal.
 
         Parameters
         ----------
@@ -994,7 +1004,7 @@ class DroughtDetection:
             Filtered DataFrame of flash drought onset events where the end category > 4.
         """
         df = self._onset_two_weeks(column, functions)
-        return df[df[f'end {column} category'] > 4]
+        return df
             
 
     def _onset_four_weeks(self, column, functions):
@@ -1037,7 +1047,7 @@ class DroughtDetection:
             onset_record = {}
             
             peak_index = None
-            peak_category = -1 
+            peak_category = None
             peak_value = None
 
             # Tracks for a four week time period
@@ -1048,7 +1058,7 @@ class DroughtDetection:
                 if pd.notna(cat_now) and pd.notna(cat_past):
                     change = cat_now - cat_past
 
-                    if not in_onset and change >= 2:  
+                    if not in_onset and change >= 2 and cat_past >= 0:  
                         in_onset = True 
                         start_index = i-4
                         onset_record = { "onset_date": weekly.index[start_index], "onset_category": cat_past, "onset_value": weekly.iloc[start_index][f'{column} {function}']}
@@ -1109,18 +1119,14 @@ class DroughtDetection:
                 onset_record["end_value"],
                 onset_record["function"]
             ))
-
+        # onset_weeks_df['onset_date'] = pd.to_datetime(onset_weeks_df['onset_date'], errors='coerce')
         onset_weeks_df = pd.DataFrame(all_onsets, columns=['onset_date', 'end_date',f'onset {column} category',f'end {column} category', f'onset {column}', f'end {column}', 'function'])
         return onset_weeks_df
         
     def four_week_onset(self, column, functions):
         """
-        Filters for four-week flash drought onsets where the ending drought category is severe or worse.
+        Filters for four-week flash drought onsets where the onset start category is starts in or above 0.
 
-        This method calls `_onset_four_weeks` to detect onset events, then filters those events
-        to retain only cases where the end category exceeds 4 — corresponding to:
-        - 5 = "Moderately Wet"
-        - 6 = "Severely Wet"
 
         Parameters
         ----------
@@ -1132,10 +1138,10 @@ class DroughtDetection:
         Returns
         -------
         pd.DataFrame
-            Filtered DataFrame of flash drought onset events where the end category > 4.
+            Filtered DataFrame of flash drought onset events where the end category > 0.
         """
         df = self._onset_four_weeks(column, functions)
-        return df[df[f'end {column} category'] > 4]
+        return df
 
     def display_two_wk_onsets(self, column, functions):
         """
@@ -1483,6 +1489,28 @@ class DroughtDetection:
         z_score = self._z_score_four_wk_onset(column, functions)
         return z_score[z_score[f'end {column}'] < -1]
 
+    
+    def plot_gradient_line_with_fill(self, ax, dates, values, cmap='GnBu_r', vmin=-3, vmax=3):
+        norm = mcolors.Normalize(vmin=vmin, vmax=vmax)
+        cmap = plt.get_cmap(cmap)
+        colors = cmap(norm(values))
+
+        ax.plot(dates, values, color='black', linewidth=1.5)
+
+
+        for i in range(len(values)-1):
+            xs = [dates[i], dates[i+1]]
+            ys1 = [values[i], values[i+1]]
+            ys2 = [ax.get_ylim()[0], ax.get_ylim()[0]]  
+
+            ax.fill_between(xs, ys1, ys2,
+                            color=colors[i],
+                            linewidth=0,
+                            alpha=0.6)
+        return norm, cmap
+    
+    
+    
     def two_week_spei_plot(self, column, functions, syear, eyear, z_score = False):
         """
         Plots weekly z-score values for different statistical distributions and highlights
@@ -1526,6 +1554,17 @@ class DroughtDetection:
         if n == 1:
             ax = [ax]
 
+        # Category boundary and label setup
+        category_bounds = [-3, -2.05, -1.645, -1.282, -0.84, -0.5, 0]
+        # category_ticks = [(category_bounds[i] + category_bounds[i+1]) / 2 for i in range(len(category_bounds)-1)]
+        category_labels = [
+            'Extreme Drought',
+            'Severe Drought',
+            'Drought',
+            'Mild Drought',
+            'Abnormal Dry',
+            'Normal',
+        ]
         for i, function in enumerate(functions):
             # uses either z-score or category
             if z_score:
@@ -1536,19 +1575,47 @@ class DroughtDetection:
             onset = onset[onset['function'] == function]
 
             for year, group in self.weekly.groupby('year'):
-                si.plot.si(group[f"{column} {function}"], ax=ax[i], cmap="vik_r")
-            
-            ax[i].scatter(onset['onset_date'], onset[f'onset {column}'], color = 'blue', marker = '*')
+                dates = group.index
+                values = group[f"{column} {function}"].values
+                # norm, cmap = self.plot_gradient_line_with_fill(ax[i], dates, values, cmap='GnBu_r', vmin=-3, vmax=3)
+                ax[i].plot(dates, values, color='black', linewidth=1)
+                ax[i].fill_between(dates, values, color='lightblue', alpha=0.5)
+            ax[i].scatter(onset['onset_date'], onset[f'onset {column}'], color = 'blue', marker = '*', s = 150)
             ax[i].invert_yaxis()
-            ax[i].set_ylabel(function, fontsize=14)
-            ax[i].grid()
+            ax[i].set_ylabel(function, fontsize=30)
+            ax[i].axhline(y=-0.5, color='m', linestyle='--', linewidth=2)
+            # ax[i].axhline(y=-1.282, color='black', linestyle='--', linewidth=1)
+            # ax[i].grid()
+
+            # Create secondary y-axis for category labels
+            ax2 = ax[i].twinx()
+            ax2.set_yticks(category_bounds)
+            ax2.set_yticklabels(['' for _ in category_bounds])
+            # label_x = pd.to_datetime(str(eyear)) + pd.Timedelta(days =25)
+            # for j in range(len(category_labels)):
+            #     mid = (category_bounds[j] + category_bounds[j+1]) / 2
+            #     if i == n - 1:
+            #         ax2.text(
+            #             x=label_x, 
+            #             y=mid,
+            #             s=category_labels[j],
+            #             va='center',
+            #             ha='left',
+            #             fontsize=11
+            #         )
+            for bound in category_bounds:
+                ax2.axhline(bound, color='gray', linestyle='--', linewidth=0.4)
+            ymin, ymax = ax[i].get_ylim()
+            ax2.set_ylim(ymin, ymax)
+            # ax2.invert_yaxis()
 
         ax[0].set_xlim(pd.to_datetime(str(syear)), pd.to_datetime(str(eyear)))
         
         if z_score:
             plt.suptitle(f' Z-SCORE SPEI for each Distribution for {column.capitalize()} {syear} - {eyear} rate = -2 z_score/2 weeks')
         else:
-            plt.suptitle(f'SPEI for each Distribution for {column.capitalize()} {syear} - {eyear} rate = 2 categories/2 weeks')
+            # plt.suptitle(f'SPEI for {column.capitalize()} {syear} - {eyear} rate = 2 categories/2 weeks')
+            plt.title("Precipitation Onset Dates for 2 category per 2 weeks", fontsize = 20)
         plt.show()
 
     def four_week_spei_plot(self, column, functions, syear, eyear, z_score = False):
@@ -1594,26 +1661,66 @@ class DroughtDetection:
         if n == 1:
             ax = [ax]
 
+        # Category boundary and label setup
+        category_bounds = [-3, -2.05, -1.645, -1.282, -0.84, -0.5, 0]
+        # category_ticks = [(category_bounds[i] + category_bounds[i+1]) / 2 for i in range(len(category_bounds)-1)]
+        category_labels = [
+            'Extreme Drought',
+            'Severe Drought',
+            'Drought',
+            'Mild Drought',
+            'Abnormal Dry',
+            'Normal',
+        ]
         for i, function in enumerate(functions):
+            # uses either z-score or category
             if z_score:
                 onset = self.z_score_four_wks(column, [function])
             else:
                 onset = self.four_week_onset(column, [function])
+                
             onset = onset[onset['function'] == function]
 
             for year, group in self.weekly.groupby('year'):
-                si.plot.si(group[f"{column} {function}"], ax=ax[i], cmap="vik_r")
-            
+                dates = group.index
+                values = group[f"{column} {function}"].values
+                # norm, cmap = self.plot_gradient_line_with_fill(ax[i], dates, values, cmap='GnBu_r', vmin=-3, vmax=3)
+                ax[i].plot(dates, values, color='black', linewidth=0.5)
+                ax[i].fill_between(dates, values, color='lightblue', alpha=0.5)
             ax[i].scatter(onset['onset_date'], onset[f'onset {column}'], color = 'blue', marker = '*')
             ax[i].invert_yaxis()
             ax[i].set_ylabel(function, fontsize=14)
+            ax[i].axhline(y=-0.5, color='m', linestyle='--', linewidth=1)
+            # ax[i].axhline(y=-1.282, color='black', linestyle='--', linewidth=1)
             ax[i].grid()
 
+            ax2 = ax[i].twinx()
+            ax2.set_yticks(category_bounds)
+            ax2.set_yticklabels(['' for _ in category_bounds])
+            label_x = pd.to_datetime(str(eyear)) + pd.Timedelta(days =20)
+            for j in range(len(category_labels)):
+                mid = (category_bounds[j] + category_bounds[j+1]) / 2
+                if i == n - 1:
+                    ax2.text(
+                        x=label_x, 
+                        y=mid,
+                        s=category_labels[j],
+                        va='center',
+                        ha='left',
+                        fontsize=9
+                    )
+            for bound in category_bounds:
+                ax2.axhline(bound, color='gray', linestyle='--', linewidth=0.4)
+            ymin, ymax = ax[i].get_ylim()
+            ax2.set_ylim(ymin, ymax)
+            # ax2.invert_yaxis()
+
         ax[0].set_xlim(pd.to_datetime(str(syear)), pd.to_datetime(str(eyear)))
+        
         if z_score:
             plt.suptitle(f' Z-SCORE SPEI for each Distribution for {column.capitalize()} {syear} - {eyear} rate = -2 z_score/4 weeks')
         else:
-            plt.suptitle(f'SPEI for each Distribution for {column.capitalize()} {syear} - {eyear} rate = 2 categories/4 weeks')
+            plt.suptitle(f'SPEI for {column.capitalize()} {syear} - {eyear} rate = 2 categories/4 weeks')
         plt.show()
     
    
@@ -1670,10 +1777,10 @@ class FlashDrought:
             county = loc['county']
             lat = loc['lat']
             lon = loc['lon']
-            pet2 = DroughtDetection(lat = lat, lon = lon, rolling_column = 'pet', residual_column='pet', weeks = 2)
+            # pet2 = DroughtDetection(lat = lat, lon = lon, rolling_column = 'pet', residual_column='pet', weeks = 2)
             pet4 = DroughtDetection(lat = lat, lon = lon, rolling_column = 'pet', residual_column='pet', weeks = 4)
             vwc = DroughtDetection(lat = lat, lon = lon , rolling_column = 'vwc', residual_column=None, weeks = 1)
-            precip2 = DroughtDetection(lat = lat, lon = lon , rolling_column = 'precip', residual_column=None, weeks = 2)
+            # precip2 = DroughtDetection(lat = lat, lon = lon , rolling_column = 'precip', residual_column=None, weeks = 2)
             precip4 = DroughtDetection(lat= lat, lon= lon, rolling_column = 'precip', residual_column=None, weeks = 4)
 
             row = {
@@ -1681,52 +1788,52 @@ class FlashDrought:
                 'County': county,
                 'lat': lat,
                 'lon': lon,
-                '# Droughts PET (2 CAT/2wk)(2 wk intervals)': len(pet2.two_week_onset('pet 2 rolling Residuals', ['pearson'])),
+                # '# Droughts PET (2 CAT/2wk)(2 wk intervals)': len(pet2.two_week_onset('pet 2 rolling Residuals', ['pearson'])),
                 '# Droughts PET (2 CAT/2wk)(4 wk intervals)': len(pet4.two_week_onset('pet 4 rolling Residuals', ['pearson'])),
-                '# Droughts PET (2 CAT/4wk)(2 wk intervals)': len(pet2.four_week_onset('pet 2 rolling Residuals', ['pearson'])),
+                # '# Droughts PET (2 CAT/4wk)(2 wk intervals)': len(pet2.four_week_onset('pet 2 rolling Residuals', ['pearson'])),
                 '# Droughts PET (2 CAT/4wk)(4 wk intervals)': len(pet4.two_week_onset('pet 4 rolling Residuals', ['pearson'])),
-                '# Droughts PET (-2 Z-SCORE/2wk)(2 wk intervals)': len(pet2.z_score_two_wks('pet 2 rolling Residuals', ['pearson'])),
-                '# Droughts PET (-2 Z-SCORE/2wk)(4 wk intervals)': len(pet4.z_score_two_wks('pet 4 rolling Residuals', ['pearson'])),
-                '# Droughts PET (-2 Z-SCORE/4wk)(2 wk intervals)': len(pet2.z_score_four_wks('pet 2 rolling Residuals', ['pearson'])),
-                '# Droughts PET (-2 Z-SCORE/4wk)(4 wk intervals)': len(pet4.z_score_four_wks('pet 4 rolling Residuals', ['pearson'])),
+                # '# Droughts PET (-2 Z-SCORE/2wk)(2 wk intervals)': len(pet2.z_score_two_wks('pet 2 rolling Residuals', ['pearson'])),
+                # '# Droughts PET (-2 Z-SCORE/2wk)(4 wk intervals)': len(pet4.z_score_two_wks('pet 4 rolling Residuals', ['pearson'])),
+                # '# Droughts PET (-2 Z-SCORE/4wk)(2 wk intervals)': len(pet2.z_score_four_wks('pet 2 rolling Residuals', ['pearson'])),
+                # '# Droughts PET (-2 Z-SCORE/4wk)(4 wk intervals)': len(pet4.z_score_four_wks('pet 4 rolling Residuals', ['pearson'])),
 
                 '# Droughts VWC (2 CAT/2wk)(Tuesdays)': len(vwc.two_week_onset('vwc 1 rolling', ['normal'])),
                 '# Droughts VWC (2 CAT/4wk)(Tuesdays)': len(vwc.four_week_onset('vwc 1 rolling', ['normal'])),
-                '# Droughts VWC (-2 Z-SCORE/2wk)(Tuesdays)': len(vwc.z_score_two_wks('vwc 1 rolling', ['normal'])),
-                '# Droughts VWC (-2 Z-SCORE/4wk)(Tuesdays)': len(vwc.z_score_four_wks('vwc 1 rolling', ['normal'])),
+                # '# Droughts VWC (-2 Z-SCORE/2wk)(Tuesdays)': len(vwc.z_score_two_wks('vwc 1 rolling', ['normal'])),
+                # '# Droughts VWC (-2 Z-SCORE/4wk)(Tuesdays)': len(vwc.z_score_four_wks('vwc 1 rolling', ['normal'])),
 
-                '# Droughts Precip (2 CAT/2wk)(2 wk intervals)': len(precip2.two_week_onset('precip 2 rolling', ['pearson'])),
+                # '# Droughts Precip (2 CAT/2wk)(2 wk intervals)': len(precip2.two_week_onset('precip 2 rolling', ['pearson'])),
                 '# Droughts Precip (2 CAT/2wk)(4 wk intervals)': len(precip4.two_week_onset('precip 4 rolling', ['pearson'])),
-                '# Droughts Precip (2 CAT/4wk)(2 wk intervals)': len(precip2.four_week_onset('precip 2 rolling', ['pearson'])),
+                # '# Droughts Precip (2 CAT/4wk)(2 wk intervals)': len(precip2.four_week_onset('precip 2 rolling', ['pearson'])),
                 '# Droughts Precip (2 CAT/4wk)(4 wk intervals)': len(precip4.two_week_onset('precip 4 rolling', ['pearson'])),
-                '# Droughts Precip (-2 Z-SCORE/2wk)(2 wk intervals)': len(precip2.z_score_two_wks('precip 2 rolling', ['pearson'])),
-                '# Droughts Precip (-2 Z-SCORE/2wk)(4 wk intervals)': len(precip4.z_score_two_wks('precip 4 rolling', ['pearson'])),
-                '# Droughts Precip (-2 Z-SCORE/4wk)(2 wk intervals)': len(precip2.z_score_four_wks('precip 2 rolling', ['pearson'])),
-                '# Droughts Precip (-2 Z-SCORE/4wk)(4 wk intervals)': len(precip4.z_score_four_wks('precip 4 rolling', ['pearson'])),
+                # '# Droughts Precip (-2 Z-SCORE/2wk)(2 wk intervals)': len(precip2.z_score_two_wks('precip 2 rolling', ['pearson'])),
+                # '# Droughts Precip (-2 Z-SCORE/2wk)(4 wk intervals)': len(precip4.z_score_two_wks('precip 4 rolling', ['pearson'])),
+                # '# Droughts Precip (-2 Z-SCORE/4wk)(2 wk intervals)': len(precip2.z_score_four_wks('precip 2 rolling', ['pearson'])),
+                # '# Droughts Precip (-2 Z-SCORE/4wk)(4 wk intervals)': len(precip4.z_score_four_wks('precip 4 rolling', ['pearson']))
 
 
-                'Highest Month PET (2 CAT/2wk)(2 wk intervals)': (pet2.two_week_onset('pet 2 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month PET (2 CAT/2wk)(4 wk intervals)': (pet4.two_week_onset('pet 4 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month PET (2 CAT/4wk)(2 wk intervals)': (pet2.four_week_onset('pet 2 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month PET (2 CAT/4wk)(4 wk intervals)': (pet4.two_week_onset('pet 4 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month PET (-2 Z-SCORE/2wk)(2 wk intervals)': (pet2.z_score_two_wks('pet 2 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month PET (-2 Z-SCORE/2wk)(4 wk intervals)': (pet4.z_score_two_wks('pet 4 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month PET (-2 Z-SCORE/4wk)(2 wk intervals)': (pet2.z_score_four_wks('pet 2 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month PET (-2 Z-SCORE/4wk)(4 wk intervals)': (pet4.z_score_four_wks('pet 4 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month PET (2 CAT/2wk)(2 wk intervals)': (pet2.two_week_onset('pet 2 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month PET (2 CAT/2wk)(4 wk intervals)': (pet4.two_week_onset('pet 4 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month PET (2 CAT/4wk)(2 wk intervals)': (pet2.four_week_onset('pet 2 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month PET (2 CAT/4wk)(4 wk intervals)': (pet4.two_week_onset('pet 4 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month PET (-2 Z-SCORE/2wk)(2 wk intervals)': (pet2.z_score_two_wks('pet 2 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month PET (-2 Z-SCORE/2wk)(4 wk intervals)': (pet4.z_score_two_wks('pet 4 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month PET (-2 Z-SCORE/4wk)(2 wk intervals)': (pet2.z_score_four_wks('pet 2 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month PET (-2 Z-SCORE/4wk)(4 wk intervals)': (pet4.z_score_four_wks('pet 4 rolling Residuals', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
 
-                'Highest Month VWC (2 CAT/2wk)(Tuesdays)': (vwc.two_week_onset('vwc 1 rolling', ['normal']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month VWC (2 CAT/4wk)(Tuesdays)': (vwc.four_week_onset('vwc 1 rolling', ['normal']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month VWC (-2 Z-SCORE/2wk)(Tuesdays)': (vwc.z_score_two_wks('vwc 1 rolling', ['normal']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month VWC (-2 Z-SCORE/4wk)(Tuesdays)': (vwc.z_score_four_wks('vwc 1 rolling', ['normal']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month VWC (2 CAT/2wk)(Tuesdays)': (vwc.two_week_onset('vwc 1 rolling', ['normal']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month VWC (2 CAT/4wk)(Tuesdays)': (vwc.four_week_onset('vwc 1 rolling', ['normal']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month VWC (-2 Z-SCORE/2wk)(Tuesdays)': (vwc.z_score_two_wks('vwc 1 rolling', ['normal']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month VWC (-2 Z-SCORE/4wk)(Tuesdays)': (vwc.z_score_four_wks('vwc 1 rolling', ['normal']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
 
-                'Highest Month Precip (2 CAT/2wk)(2 wk intervals)': (precip2.two_week_onset('precip 2 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month Precip (2 CAT/2wk)(4 wk intervals)': (precip4.two_week_onset('precip 4 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month Precip (2 CAT/4wk)(2 wk intervals)': (precip2.four_week_onset('precip 2 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month Precip (2 CAT/4wk)(4 wk intervals)': (precip4.two_week_onset('precip 4 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month Precip (-2 Z-SCORE/2wk)(2 wk intervals)': (precip2.z_score_two_wks('precip 2 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month Precip (-2 Z-SCORE/2wk)(4 wk intervals)': (precip4.z_score_two_wks('precip 4 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month Precip (-2 Z-SCORE/4wk)(2 wk intervals)': (precip2.z_score_four_wks('precip 2 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
-                'Highest Month Precip (-2 Z-SCORE/4wk)(4 wk intervals)': (precip4.z_score_four_wks('precip 4 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month Precip (2 CAT/2wk)(2 wk intervals)': (precip2.two_week_onset('precip 2 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month Precip (2 CAT/2wk)(4 wk intervals)': (precip4.two_week_onset('precip 4 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month Precip (2 CAT/4wk)(2 wk intervals)': (precip2.four_week_onset('precip 2 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month Precip (2 CAT/4wk)(4 wk intervals)': (precip4.two_week_onset('precip 4 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month Precip (-2 Z-SCORE/2wk)(2 wk intervals)': (precip2.z_score_two_wks('precip 2 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month Precip (-2 Z-SCORE/2wk)(4 wk intervals)': (precip4.z_score_two_wks('precip 4 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month Precip (-2 Z-SCORE/4wk)(2 wk intervals)': (precip2.z_score_four_wks('precip 2 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
+                # 'Highest Month Precip (-2 Z-SCORE/4wk)(4 wk intervals)': (precip4.z_score_four_wks('precip 4 rolling', ['pearson']))['onset_date'].dt.strftime('%B').value_counts().pipe(lambda x: x[x == x.max()]).index.tolist(),
                 
             }
 
