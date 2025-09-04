@@ -1,0 +1,146 @@
+Metadata-Version: 2.4
+Name: FlashDroughts
+Version: 0.1.0
+Summary: Tools for detecting and analyzing flash drought events.
+Author: Adrienne Kirk
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: matplotlib
+Requires-Dist: scipy
+Requires-Dist: scikit-learn
+Requires-Dist: shapely
+Requires-Dist: pyshp
+Requires-Dist: cartopy
+
+# FlashDrought
+FlashDroughts
+
+A Python package for detecting, analyzing, and visualizing flash drought events from climate data.
+
+This repository provides tools for preprocessing climate variables, detecting flash drought onsets, and analyzing distributions of onset timing and severity using statistical methods such as kernel density estimation (KDE), linear regression residuals, and standardized drought indices.
+
+Features
+
+Data Handling
+
+Works with weekly climate data (precipitation, potential evapotranspiration (PET), volumetric water content (VWC), etc.)
+
+Supports rolling sums, seasonal subsets, and transformations.
+
+Drought Detection
+
+Implements flash drought onset detection using thresholds on standardized z-scores (SPI-like indices).
+
+Allows onset categories (Abnormally Dry, Moderate Drought, Severe Drought, etc.).
+
+Customizable detection criteria (e.g., must start at ≥ Abnormally Dry).
+
+Statistical Analysis
+
+Kernel Density Estimation (KDE) histograms for drought onset distributions.
+
+Regression-based residual analysis for climate signals.
+
+Pearson Type III distribution fitting for drought index standardization.
+
+Visualization
+
+Histogram and KDE plots of onset timing (by month, season, or distribution).
+
+Regression diagnostics and residual trends.
+
+Installation
+
+Clone the repository and install dependencies:
+
+git clone https://github.com/yourusername/FlashDroughts.git
+cd FlashDroughts
+pip install -r requirements.txt
+
+
+Dependencies include:
+
+pandas
+
+numpy
+
+matplotlib
+
+scipy
+
+sklearn
+
+(You can adjust requirements.txt depending on the exact libraries you’ve been using.)
+
+Usage
+
+Example notebook setup (from your workflow):
+
+%pip install FlashDroughts==1.2.2 -q
+
+import sys
+sys.path.append("..")
+from src.FlashDroughts import KDEhistogram, DroughtDetection
+
+Example Workflow
+
+Load Data
+Provide a weekly climate dataset with a datetime index and relevant columns (e.g., precip, PET, VWC).
+
+import pandas as pd
+df = pd.read_csv("example_weekly_data.csv", parse_dates=["date"], index_col="date")
+
+
+Run Detection
+
+detector = DroughtDetection(df)
+droughts = detector.detect_onset(column="VWC", functions=["rolling_sum", "zscore"])
+
+
+Analyze Results
+
+kde = KDEhistogram(droughts)
+kde.plot_distribution(column="VWC")
+
+
+Check Onset Distributions
+
+most_common = droughts.groupby(["State","County"])["month"].apply(lambda x: x.mode())
+
+Methods
+
+Z-Score Thresholds
+
+≤ -2.05: Extreme Drought
+
+≤ -1.645: Severe Drought
+
+≤ -1.282: Moderate Drought
+
+≤ -0.84: Abnormally Dry
+
+≥ -0.5: Normal
+
+Onset Detection Rules
+
+Onsets must begin at ≥ Abnormally Dry (or higher).
+
+Consecutive weeks tracked until conditions return to Normal.
+
+Linear Regression Residuals
+
+Regression of seasonal signals (e.g., PET trends).
+
+Residuals used to evaluate anomalies.
+
+Applications
+
+Detect flash drought events across counties or regions.
+
+Analyze seasonal onset patterns (spring, summer, fall).
+
+Quantify changes in drought onset frequency and intensity.
+
+Useful for climate variability and climate change research.

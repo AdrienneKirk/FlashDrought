@@ -486,7 +486,7 @@ class DroughtDetection:
     _build_weekly_dataframe(residual_column):
         Builds and returns a weekly dataframe containing rolling and residual values.
     """
-    def __init__(self, lat, lon, rolling_column, weeks, residual_column):
+    def __init__(self, lat, lon, start_date, rolling_column, weeks, residual_column):
         """
         Initializes the DroughtDetection object for a specific location and analysis setup.
         ONLY WORKS FOR LAT AND LON IN THE NORTHEAST UNITED STATE AND FROM 2002 - PRESENT
@@ -508,12 +508,13 @@ class DroughtDetection:
         - The rolling_column needs an input and can use 1 for the weeks for no rolling (vwc).
 
         """
+        self.start_date = start_date #'2002-03-01'
         self.lat = lat
         self.lon = lon
         self.residual_column = residual_column
         self.weeks = weeks
         self.rolling_column = rolling_column
-        self.histogram = KDEhistogram('2002-03-01', '2024-10-31', lat, lon) # creates dates for total time period for calulations purposes.
+        self.histogram = KDEhistogram(start_date, '2024-10-31', lat, lon) # creates dates for total time period for calulations purposes.
         self.weekly = self._build_weekly_dataframe(residual_column=self.residual_column)
         
     def _build_weekly_dataframe(self, residual_column = None):
@@ -1749,7 +1750,7 @@ class FlashDrought:
         """
         self.locations = locations
             
-    def combined_df(self):
+    def combined_df(self, start_date):
         """
         Generate a summary DataFrame of flash drought statistics for each location.
 
@@ -1777,20 +1778,20 @@ class FlashDrought:
             county = loc['county']
             lat = loc['lat']
             lon = loc['lon']
-            # pet2 = DroughtDetection(lat = lat, lon = lon, rolling_column = 'pet', residual_column='pet', weeks = 2)
-            pet4 = DroughtDetection(lat = lat, lon = lon, rolling_column = 'pet', residual_column='pet', weeks = 4)
-            vwc = DroughtDetection(lat = lat, lon = lon , rolling_column = 'vwc', residual_column=None, weeks = 1)
-            # precip2 = DroughtDetection(lat = lat, lon = lon , rolling_column = 'precip', residual_column=None, weeks = 2)
-            precip4 = DroughtDetection(lat= lat, lon= lon, rolling_column = 'precip', residual_column=None, weeks = 4)
+            pet2 = DroughtDetection(lat = lat, lon = lon, start_date = start_date,  rolling_column = 'pet', residual_column='pet', weeks = 2)
+            pet4 = DroughtDetection(lat = lat, lon = lon, start_date = start_date, rolling_column = 'pet', residual_column='pet', weeks = 4)
+            vwc = DroughtDetection(lat = lat, lon = lon , start_date = start_date, rolling_column = 'vwc', residual_column=None, weeks = 1)
+            precip2 = DroughtDetection(lat = lat, lon = lon , start_date = start_date, rolling_column = 'precip', residual_column=None, weeks = 2)
+            precip4 = DroughtDetection(lat= lat, lon= lon, start_date = start_date, rolling_column = 'precip', residual_column=None, weeks = 4)
 
             row = {
                 'State': state,
                 'County': county,
                 'lat': lat,
                 'lon': lon,
-                # '# Droughts PET (2 CAT/2wk)(2 wk intervals)': len(pet2.two_week_onset('pet 2 rolling Residuals', ['pearson'])),
+                '# Droughts PET (2 CAT/2wk)(2 wk intervals)': len(pet2.two_week_onset('pet 2 rolling Residuals', ['pearson'])),
                 '# Droughts PET (2 CAT/2wk)(4 wk intervals)': len(pet4.two_week_onset('pet 4 rolling Residuals', ['pearson'])),
-                # '# Droughts PET (2 CAT/4wk)(2 wk intervals)': len(pet2.four_week_onset('pet 2 rolling Residuals', ['pearson'])),
+                '# Droughts PET (2 CAT/4wk)(2 wk intervals)': len(pet2.four_week_onset('pet 2 rolling Residuals', ['pearson'])),
                 '# Droughts PET (2 CAT/4wk)(4 wk intervals)': len(pet4.two_week_onset('pet 4 rolling Residuals', ['pearson'])),
                 # '# Droughts PET (-2 Z-SCORE/2wk)(2 wk intervals)': len(pet2.z_score_two_wks('pet 2 rolling Residuals', ['pearson'])),
                 # '# Droughts PET (-2 Z-SCORE/2wk)(4 wk intervals)': len(pet4.z_score_two_wks('pet 4 rolling Residuals', ['pearson'])),
@@ -1802,9 +1803,9 @@ class FlashDrought:
                 # '# Droughts VWC (-2 Z-SCORE/2wk)(Tuesdays)': len(vwc.z_score_two_wks('vwc 1 rolling', ['normal'])),
                 # '# Droughts VWC (-2 Z-SCORE/4wk)(Tuesdays)': len(vwc.z_score_four_wks('vwc 1 rolling', ['normal'])),
 
-                # '# Droughts Precip (2 CAT/2wk)(2 wk intervals)': len(precip2.two_week_onset('precip 2 rolling', ['pearson'])),
+                '# Droughts Precip (2 CAT/2wk)(2 wk intervals)': len(precip2.two_week_onset('precip 2 rolling', ['pearson'])),
                 '# Droughts Precip (2 CAT/2wk)(4 wk intervals)': len(precip4.two_week_onset('precip 4 rolling', ['pearson'])),
-                # '# Droughts Precip (2 CAT/4wk)(2 wk intervals)': len(precip2.four_week_onset('precip 2 rolling', ['pearson'])),
+                '# Droughts Precip (2 CAT/4wk)(2 wk intervals)': len(precip2.four_week_onset('precip 2 rolling', ['pearson'])),
                 '# Droughts Precip (2 CAT/4wk)(4 wk intervals)': len(precip4.two_week_onset('precip 4 rolling', ['pearson'])),
                 # '# Droughts Precip (-2 Z-SCORE/2wk)(2 wk intervals)': len(precip2.z_score_two_wks('precip 2 rolling', ['pearson'])),
                 # '# Droughts Precip (-2 Z-SCORE/2wk)(4 wk intervals)': len(precip4.z_score_two_wks('precip 4 rolling', ['pearson'])),

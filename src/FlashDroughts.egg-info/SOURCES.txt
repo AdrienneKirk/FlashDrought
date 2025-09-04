@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/__init__.py
+src/FlashDroughts/FlashDroughts 2.py
+src/FlashDroughts/FlashDroughts.py
+src/FlashDroughts.egg-info/PKG-INFO
+src/FlashDroughts.egg-info/SOURCES.txt
+src/FlashDroughts.egg-info/dependency_links.txt
+src/FlashDroughts.egg-info/requires.txt
+src/FlashDroughts.egg-info/top_level.txt

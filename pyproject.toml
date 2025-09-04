@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "FlashDroughts"
+version = "0.1.0"
+description = "Tools for detecting and analyzing flash drought events."
+authors = [
+    { name="Adrienne Kirk" }
+]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "scipy",
+    "scikit-learn",
+    "shapely",
+    "pyshp",
+    "cartopy",
+]
